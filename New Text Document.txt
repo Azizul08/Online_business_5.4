@@ -1,0 +1,27 @@
+$info=DB::table('customers')->where('id',Session::get('customerId'))->first();
+            $user_email = $info->emailAddress;
+            
+            $data = array(
+                'firstname' => $info->firstName,
+                'lastname' => $info->lastName,
+                'address' => $info->address,
+                'phone' => $info->phoneNumber,
+                'orderId' => Session::get('orderId'),
+                'productId' => $cartProduct->id,
+                'productName' => $cartProduct->name,
+                'productPrice' => $cartProduct->price,
+                'productQuantity' => $cartProduct->qty
+                );
+                
+            $name='Grocery';
+            // $user_mail= 'netcoden113@gmail.com';
+            // dd($data);
+            Mail::send('frontend.emailtemplate',$data, function ($message) use ($user_email,$name) {    
+            // $message->from('support@sopnorupayan.com','Company Name');
+        	   $message->to($user_email,$name)->subject('Your order has been received!');
+ 		       });
+            // Admin
+ 		       Mail::send('frontEnd.emailtemplate',$data, function ($message) {
+  			     $message->to('m.azizulcse@gmail.com ');
+  			     $message->subject('Client ordered form Grocery Website ');
+          });
